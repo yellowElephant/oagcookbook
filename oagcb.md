@@ -335,8 +335,10 @@ end
 
 def randUserAgent()
   #returns a random user agent but weighs towards popular browsers
-  #problem: it doesn't include Chrome or Opera
-  return ["Windows IE 7","Windows IE 7","Windows IE 7","Windows IE 7","Windows IE 6","Windows Mozilla","Windows Mozilla","Windows Mozilla","Windows Mozilla","Mac Safari","Mac FireFox","Mac FireFox","Linux Firefox"].self[rand(length)]
+  #returns a random user agent but weighs towards popular browsers
+  #problem: it doesn't include Chrome or Opera. Sample is for Ruby 1.9, need change for 
+  #earlier versions of Ruby.  
+  return ["Windows IE 7","Windows IE 7","Windows IE 7","Windows IE 7","Windows IE 6","Windows Mozilla","Windows Mozilla","Windows Mozilla","Windows Mozilla","Mac Safari","Mac FireFox","Mac FireFox","Linux Firefox"].sample
 end
 
 # => ...
