@@ -320,12 +320,27 @@ end
 maxminutes=120 # for example, 2 hours or 120 minutes
 starttime=Time.new
 
-
 # OPEN YOUR MAIN LOOP HERE
 
 if Time.new-starttime>maxminutes*60 then 
   break # out of your loop and wrap up the script...
 end
+
+#!/usr/local/bin/ruby
+
+# => If you use Mechanize in Ruby to do your scraping you can set the "user agent," that is,
+# => the browser that you are pretending to be when you grab files from the server. You can
+# => add some noise to your activity by choosing a random user agent each time you use the
+# => script.
+
+def randUserAgent()
+  #returns a random user agent but weighs towards popular browsers
+  #problem: it doesn't include Chrome or Opera
+  return ["Windows IE 7","Windows IE 7","Windows IE 7","Windows IE 7","Windows IE 6","Windows Mozilla","Windows Mozilla","Windows Mozilla","Windows Mozilla","Mac Safari","Mac FireFox","Mac FireFox","Linux Firefox"].self[rand(length)]
+end
+
+# => ...
+myparser.user_agent_alias=randUserAgent()
 
 ```
 
@@ -339,4 +354,4 @@ Changes
 2013.1.13 williwaw - original posted
 2013.1.16 yellowElephant - added recommended security precautions for movement members
 2013.1.19 kfogel - language
-2013.1.19 williwaw - ruby.recipe add some ways to simulate human behavior in scraper
+2013.1.19-20 williwaw - ruby.recipe add some ways to simulate human behavior in scraper
