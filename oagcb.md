@@ -154,7 +154,7 @@ More specifically:
 - Design scrapers to download materials randomly (while logging completed downloads) rather than in sequence, or else a random groups of smaller sequences consistent with human behavior
 
 **Recipes**
-----------
+-----------------
 
 The remainder of this cookbook should be composed of recipes. These may include instructions for the use of or the code for scrapers and other tools that are appropriate for wider distribution. They may include tutorials and descriptions of good practices for the various roles of the movement. They may describe appropriate security measures. They may recount past victories and failures of the movement–but in a way that does not compromise anyone's identity. They should ideally not include any direct links to online resources, but may provide suggestions on how to use search techniques to find them, as they may often move. Under each recipe, include the date it was written, an optional author pseudonym, and if you distribute an edited version of this document, update the timestamp and version information at the bottom for the cookbook as a whole.
 
@@ -231,17 +231,112 @@ Cells that personally know eachother should take steps to ensure that keys were 
 
 Limiting the circle of trust is key to the survival of the movment. In the past, many online hacker networks have been broken when one member is discovered and agrees to cooperate in exchange for a lighter sentence. A previously trusted person will unwillingly do all they can to expose other cell members and escape their own punishment. Be suspicious of suddent attempts to get more personal information from you by contacts in the movement and again, by keeping the circle of trust small, damage can be contained.
 
+Ways to Make Your Scrapers More Human
+-----------------------------------------------------
 
-*Version (date-number-author)*:
-2013.1.16-1.0.1-yellowElephant
-*Modified from:*
-2012.1.13-1.0-williwaw
+Below are some simple code snippets to give you ideas about how to design scrapers that will behave more like humans, thus concealing to some degree your raid on a database. Of course, if you conduct the entire raid from a single IP address, or your are always logging in with the same user credentials, a careful analysis of server logs and traffic can lead to discovery. However, the following may help fool the lazy server administrator who merely glances over access logs from time to time. 
+
+*In Ruby:*
+
+```ruby
+# => This method can be used to create some variety in pauses between grabbing files from a server
+# => and thus simulate human behavior. You set a default break time (here twoseconds, in reality a 
+# => random time of 1-3 seconds) and several more rare longer breaks. You then indicate a probability
+# => for these other longer breaks to occur. For example, currently there is a 0.2% chance that the
+# => scraper will take a roughly one hour break, but a 0.5% chance it will take a 30 minute break,
+# => and so on.
+def randomBreak()
+  
+  #set the various times for a break:
+  twoseconds=rand(1..3)
+  fifteensec=rand(12..18)
+  onemin=rand(50..70)
+  fivemin=rand(250..350)
+  tenmin=rand(500..700)
+  thirtymin=rand(1600..2000)
+  onehour=rand(3300..3900)
+  #default break time:
+  sleeptime=twoseconds
+  #roll the dice:
+  x=rand(1..1000)
+  #but percentage chance that there is a longer break:
+  if (1..2).member?(x) then sleeptime=onehour end
+  if (3..7).member?(x) then sleeptime=thirtymin end
+  if (8..18).member?(x) then sleeptime=tenmin end
+  if (19..32).member?(x) then sleeptime=fivemin end
+  if (33..50).member?(x) then sleeptime=onemin end
+  if (51..120).member?(x) then sleeptime=fifteensec end
+  
+  puts "Sleeping "+sleeptime.to_s+" seconds."
+  sleep sleeptime
+end
+
+randomBreak()
+
+#!/usr/local/bin/ruby
+
+# => This method can be used to create some variety in pauses between grabbing files from a server
+# => This method can be used to force your script to only operate within certain "working hours"
+# => and thus simulate human behavior. If you have a scraper pulling files 24 hours a day, anyone
+# => inspecting server logs closely will immediately know automated downloading is happening.
+# => Use this script to make it at least somewhat more plausible that a very diligent human being
+# => was downloading files from their favorite database. 
+# => 
+# => Call this method once each time a file has been downloaded completely before proceeding to
+# => the next round of the loop. Only proceed, if the method returns true. If it is "outside 
+# => working hours" it will return false. You can use a while loop to wait until working hours. 
+
+# fromgmt - how many hours earlier or later than GMT timezone you wish to operate in
+
+def workinghours(fromgmt=0,starthour=9,endhour=17)
+  #The current hour at GMT timezone:
+  currentgmt=Time.new.gmtime.hour
+  currentmin=Time.new.min
+  #The current hour at timezone of desired operation:
+  currenthour=currentgmt+fromgmt
+  if currenthour==24 then currenthour=0 end
+  #we assume here workingg hours do not cross midnight, anyone want to redo the following to 
+  #account for that possibility?
+  if currenthour>=starthour && currenthour<=endhour
+    return true
+  end
+  return false
+end
+
+#how we might use this:
+while !workinghours(fromgmt=1,starthour=1,endhour=11) 
+  # wait one minute and check the time again
+  sleep 60
+end
+
+#!/usr/local/bin/ruby
+
+# => This very simple snippet can be used to set a maximum limit on 
+# => the time the script will run. Here again we simulate likely human
+# => behavior. You can run the script comfortable that it will run 
+# => for a limited time.
+
+# maxminutes - The number of minutes you want this script to run
+maxminutes=120 # for example, 2 hours or 120 minutes
+starttime=Time.new
+
+
+# OPEN YOUR MAIN LOOP HERE
+
+if Time.new-starttime>maxminutes*60 then 
+  break # out of your loop and wrap up the script...
+end
+
+```
+
+
 
 This document is in the public domain.
 
-Changelog
---------------
+Changes
+--------------------
 
-1.0 williwaw - original posted
-
-1.0.1 yellowElephant - added recommended security precautions for movement members
+2013.1.13 williwaw - original posted
+2013.1.16 yellowElephant - added recommended security precautions for movement members
+2013.1.19 kfogel - language
+2013.1.19 williwaw - ruby.recipe add some ways to simulate human behavior in scraper
