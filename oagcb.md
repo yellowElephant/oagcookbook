@@ -1,13 +1,13 @@
 The Open Access Guerilla Cookbook
 ===============================
 
-Dedicated to Aaron Swarz (1986-2013)
+Dedicated to Aaron Swartz (1986-2013)
 
 Introduction
 ----------------
 In 2008, a short and passionate appeal appeared online which called for all of us to, "take information, wherever it is stored, make our copies and share them with the world. We need to take stuff that's out of copyright and add it to the archive. We need to buy secret databases and put them on the Web. We need to download scientific journals and upload them to file sharing networks. We need to fight for Guerilla Open Access."
 
-In January, 2013, its author Aaron Swarz took his own life. Among his many achievements included an important initiative to liberate the PACER court records database and leadership roles in several movements that support free culture. In the last years of his life, he faced serious criminal charges for following his own manifesto and launching one of the largest content liberation efforts to date: the downloading of millions of articles from the JSTOR database. 
+In January, 2013, its author Aaron Swartz took his own life. Among his many achievements included an important initiative to liberate the PACER court records database and leadership roles in several movements that support free culture. In the last years of his life, he faced serious criminal charges for following his own manifesto and launching one of the largest content liberation efforts to date: the downloading of millions of articles from the JSTOR database. 
 
 If the threat of decades of prison time for the JSTOR raid was designed to strike fear into OA guerillas everywhere, the tragic death of this selfless supporter of the movement should be met with a renewed commitment to our ideals.  It also offers us an opportunity to up our game. 
 
@@ -40,7 +40,7 @@ We now live in the world of crowdsourcing. The power of a lone hacker armed with
 
 **Segregate open from secret action**
 
-Aaron Swarz combined strong public advocacy with secret guerilla action. In his case, it was not key to his discovery, but it is likely to have impacted the severity of the charges brought against him. In all guerilla movements it is important to segregate open from secret action. It is unwise to be an open voice for radical illegal action and also its agent. If you begin engaging in dangerous OA guerilla action, temper your public voice and avoid drawing attention to yourself, especially with regard to the virtues of illegal content liberation. 
+Aaron Swartz combined strong public advocacy with secret guerilla action. In his case, it was not key to his discovery, but it is likely to have impacted the severity of the charges brought against him. In all guerilla movements it is important to segregate open from secret action. It is unwise to be an open voice for radical illegal action and also its agent. If you begin engaging in dangerous OA guerilla action, temper your public voice and avoid drawing attention to yourself, especially with regard to the virtues of illegal content liberation. 
 
 **Protect the Public Domain First**
 
@@ -160,6 +160,7 @@ The remainder of this cookbook should be composed of recipes. These may include 
 
 Securing Communication
 --------------------------------
+By yellowElephant
 
 Security in communication between members of the movement is of great importance. While legal authorities will want to investigate our actions, perhaps of a greater threat is that publishers and content industries that have significant resources will want to undercover who we are and can easily outsource their work to hired hackers. 
 
@@ -346,6 +347,19 @@ myparser.user_agent_alias=randUserAgent()
 
 ```
 
+Recipe: Overcome Built-In Limit on JSTOR Liberator 
+---------------------------------------------------------------------
+By FreeDam | Status: Works as of 2012.1.20
+
+The Aaron Swartz Memorial JSTOR Liberator offers an elegant tool for uploading a single publically viewable JSTOR document to a memorial archive. The tool creates a cookie in your browser when you use it and prevents you from making more than one contribution. Perhaps you want to offer ten PDFs to the memorial? Maybe fifty? 
+
+To overcome the limit without repeatedly opening a new browser window, we can modify your JSTOR Liberator bookmarklet code slightly:
+
+```javascript
+javascript:var date=new Date();date.setTime(date.getTime()+(10*24*60*60*1000));var expires = "; expires="+date.toGMTString();document.cookie='jstorLib_count=0;'+expires+'; path=/';(function()%7Bvar%20s%3Ddocument.createElement(%27script%27)%3Bs.type%3D%27text/javascript%27%3Bs.src%3D%27http://aaronsw.archiveteam.org/js%27%3Bdocument.getElementsByTagName(%27head%27)%5B0%5D.appendChild(s)%3B%7D)()%3B
+```
+
+This merely sets the "jstorLib_count" to 0, thus allowing you to make multiple submissions. This client side limit will be replaced by a server based limit at some point, but in the meantime, you can use this modified bookmarklet  to make multiple contributions easily.
 
 
 This document is in the public domain.
@@ -354,6 +368,11 @@ Changes
 --------------------
 
 2013.1.13 williwaw - original posted
+
 2013.1.16 yellowElephant - added recommended security precautions for movement members
+
 2013.1.19 kfogel - language
+
 2013.1.19-20 williwaw - ruby.recipe add some ways to simulate human behavior in scraper
+
+2013.1.20 FreeDam - Overcome Built-in limit on JSTOR Liberator
